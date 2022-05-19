@@ -2,10 +2,7 @@
 This module should be run once to initialize a new sqlite3 database file for the mathquiz program.
 WARNING - Running this module will result in the loss of an existing mathquiz database of the same name.
 
-Execute this file on a python command line by supplying the full path to a new database file.
----
-python initialize_sqlite_db.py /full/path/to/db/file.db
----
+Execute this file on a python command line
 '''
 
 import sqlite3

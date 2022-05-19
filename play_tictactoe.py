@@ -27,7 +27,8 @@ def play_tictactoe(p1,p2,quiet=False,training=False,num_games=1):
                 player2.ttt_board[current_move] = -1
                 # Keep official board up to date
                 ttt_board[current_move] = 1
-                printBoard(ttt_board)
+                if not quiet:
+                    printBoard(ttt_board)
             #Player 2 makes a move
             else:
                 current_move = player2.makeMove()
@@ -36,7 +37,8 @@ def play_tictactoe(p1,p2,quiet=False,training=False,num_games=1):
                 player1.ttt_board[current_move] = -1
                 # Keep official board up to date
                 ttt_board[current_move] = -1
-                printBoard(ttt_board)
+                if not quiet:
+                    printBoard(ttt_board)
 
             if training:
                 # Keep board history for later AI training
@@ -46,13 +48,15 @@ def play_tictactoe(p1,p2,quiet=False,training=False,num_games=1):
             #Check the results
             isOver, p1_result, p2_result = gameOver(ttt_board)
             if isOver:
-                print("Turns:",turn+1)
-                printBoard(ttt_board)
+                if not quiet:
+                    print("Turns:",turn+1)
+                    printBoard(ttt_board)
                 #print(player1_history)
                 #print(player2_history)
 
                 # Record results in database for future AI training
-                savetoDB([(p1,p1_result, player1_history),(p2, p2_result, player2_history)])
+                if training:
+                    savetoDB([(p1,p1_result, player1_history),(p2, p2_result, player2_history)])
                 # Game is over
                 break
             else:
@@ -68,8 +72,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--P1", help="Type of Player 1 (0=Random, 1=Rules, 2=AI, 3=USER)",type=int, default=1)
     parser.add_argument("--P2", help="Type of Player 2 (0=Random, 1=Rules, 2=AI, 3=USER)",type=int, default=1)
-    parser.add_argument("--quiet", help="Used when running similation games",action="store_true", default=False)
-    parser.add_argument("--training", help="Used when running similation games",action="store_true", default=False)
+    parser.add_argument("--quiet", help="Suppress board being shown after each turn",action="store_true", default=False)
+    parser.add_argument("--training", help="Record all moves and save to database as future AI training data",action="store_true", default=False)
     parser.add_argument("--num_games", help="Number of games to run",type=int, default=1)
 
     args = parser.parse_args()
